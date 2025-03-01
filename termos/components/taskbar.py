@@ -9,7 +9,7 @@ from textual.containers import ScrollableContainer
 from textual.reactive import reactive
 from textual.widget import Widget
 
-from termos.apps import App
+from termos.apps import OSApp
 
 if TYPE_CHECKING:
     from termos.app import TermOS
@@ -41,7 +41,7 @@ class StartButton(Widget):
 
 
 class AppTab(Widget):
-    def __init__(self, app: App) -> None:
+    def __init__(self, app: OSApp) -> None:
         super().__init__()
         self.os_app = app
 

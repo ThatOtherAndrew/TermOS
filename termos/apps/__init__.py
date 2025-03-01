@@ -1,1 +1,1 @@
-from .base import App
+from .base import OSApp

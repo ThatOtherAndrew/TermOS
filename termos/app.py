@@ -3,7 +3,7 @@ from textual.app import App as TextualApp
 from textual.widgets import Header
 
 from termos.components.desktop import MainFolderPane
-from termos.apps import App
+from termos.apps import OSApp
 from termos.components.taskbar import Taskbar
 
 
@@ -12,7 +12,7 @@ class TermOS(TextualApp):
 
     def __init__(self):
         super().__init__()
-        self.os_apps: list[App] = [App('app-foo'), App('app-bar'), App('app-baz')]
+        self.os_apps: list[OSApp] = [OSApp('app-foo'), OSApp('app-bar'), OSApp('app-baz')]
 
     def compose(self) -> ComposeResult:
         yield Header()
