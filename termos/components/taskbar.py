@@ -39,6 +39,9 @@ class StartButton(Widget):
     def render(self) -> RenderResult:
         return '╭─╮\n╰─╯'
 
+    async def on_click(self) -> None:
+        await self.run_action('app.command_palette')
+
 
 class WindowTab(Widget):
     def __init__(self, window: Window) -> None:

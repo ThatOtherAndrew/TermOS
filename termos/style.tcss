@@ -7,6 +7,10 @@ MenuBar {
     content-align-horizontal: center;
 }
 
+.desktop {
+    hatch: right $secondary 50%;
+}
+
 Taskbar {
     layout: horizontal;
     width: 100%;
@@ -81,7 +85,7 @@ TitleBar {
     }
 
     TitleBarButton:hover {
-        background: $accent;
+        background: $secondary;
     }
 }
 
