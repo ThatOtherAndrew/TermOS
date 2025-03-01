@@ -17,6 +17,7 @@ from termos.components.window import Window
 class TermOS(TextualApp):
     TITLE = "TermOS"
     CSS_PATH = ["style.tcss", *tcss_paths()]
+    ALLOW_SELECT = False
 
     windows: var[list[Window]] = var(list)
 

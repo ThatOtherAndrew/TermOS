@@ -1,5 +1,5 @@
 from textual.app import ComposeResult
-from textual.containers import Center, HorizontalScroll, Vertical
+from textual.containers import Center, HorizontalScroll
 from textual.widgets import TextArea, Button, Label
 
 from termos.apps import OSApp
