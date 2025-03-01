@@ -9,10 +9,10 @@ from textual.containers import HorizontalGroup
 from textual.reactive import reactive
 from textual.widget import Widget
 
-from termos.apps import OSApp
+from termos.components.window import Window
 
 if TYPE_CHECKING:
-    from termos.app import TermOS
+    from termos.main import TermOS
 
 
 class Clock(Widget):
@@ -40,17 +40,18 @@ class StartButton(Widget):
         return '╭─╮\n╰─╯'
 
 
-class AppTab(Widget):
-    def __init__(self, app: OSApp) -> None:
+class WindowTab(Widget):
+    def __init__(self, window: Window) -> None:
         super().__init__()
-        self.os_app = app
+        self.window = window
 
     def render(self) -> RenderResult:
-        return self.os_app.NAME
+        return ' '.join(filter(None, [self.window.icon, self.window.title]))
 
 
 class Taskbar(HorizontalGroup, can_focus=False, can_focus_children=False):
     app: TermOS
+    windows = reactive(list[Window])
 
     def __init__(self) -> None:
         super().__init__()
@@ -58,8 +59,9 @@ class Taskbar(HorizontalGroup, can_focus=False, can_focus_children=False):
     def compose(self) -> ComposeResult:
         yield StartButton()
 
-        for app in self.app.os_apps:
-            yield AppTab(app)
+        for window in self.windows:
+            yield WindowTab(window)
+
         yield Clock()
 
     def _on_mouse_scroll_down(self, event: events.MouseScrollDown) -> None:

@@ -5,22 +5,19 @@ from textual.widgets import TextArea, Button, Label
 from termos.apps import OSApp
 
 
-class NotesApp(OSApp):
-    """A Notes App Widget for the OS."""
-
-    NAME = 'Notes'
+class Notepad(OSApp):
+    NAME = 'Notepad'
     ICON = '📝'
-    # language=SCSS
-    DEFAULT_CSS = '''
-    TextArea {
-        width: auto;
-    }
-    '''
+    DESCRIPTION = 'Simple text editor'
 
-    def content(self) -> ComposeResult:
+    @staticmethod
+    def compose() -> ComposeResult:
         with Center():
-            yield Label('untitled.txt')
+            yield Label('<new file>')
         yield TextArea()
         with HorizontalScroll():
             yield Button('Save', variant='primary')
             yield Button('Save As...', variant='default')
+
+    def launch(self) -> None:
+        self.create_window(self.compose())

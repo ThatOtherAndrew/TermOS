@@ -1,8 +1,15 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, Container
 from textual.reactive import reactive
 from textual.widget import Widget
 from textual.widgets import Label
+
+if TYPE_CHECKING:
+    from termos.apps import OSApp
 
 
 class TitleBarButton(Widget):
@@ -24,20 +31,38 @@ class TitleBar(HorizontalGroup):
         self.icon = icon
 
     def compose(self) -> ComposeResult:
-        yield Label(self.icon)
-        yield Label(self.title)
-        with HorizontalGroup():
+        if self.icon:
+            yield Label(self.icon)
+        if self.title:
+            yield Label(self.title)
+        with HorizontalGroup(classes='window-controls'):
             yield TitleBarButton("🗕", classes="window-minimise")
             yield TitleBarButton("🗖", classes="window-maximise")
             yield TitleBarButton("🗙", classes="window-close")
 
 
 class Window(Container):
-    def __init__(self, title: str, icon: str, content: ComposeResult) -> None:
+    title = reactive(str)
+    icon = reactive(str)
+
+    def __init__(
+        self,
+        parent_app: OSApp,
+        content: ComposeResult,
+        title: str = '',
+        icon: str = '',
+        width: int | str = 'auto',
+        height: int | str = 'auto',
+    ) -> None:
         super().__init__()
-        self.title_bar = TitleBar(title, icon)
+        self.parent_app = parent_app
         self.content = content
+        self.title = title
+        self.icon = icon
+        self.styles.width = width
+        self.styles.height = height
 
     def compose(self) -> ComposeResult:
-        yield self.title_bar
-        yield from self.content
+        yield TitleBar(self.title, self.icon)
+        with Container(classes="window-body"):
+            yield from self.content

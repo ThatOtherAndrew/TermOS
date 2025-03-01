@@ -1,5 +1,5 @@
 def main() -> None:
-    from .app import TermOS
+    from .main import TermOS
     TermOS().run()
 
 

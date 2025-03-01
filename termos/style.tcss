@@ -19,7 +19,7 @@ Taskbar {
         border-right: vkey $foreground 20%;
     }
 
-    AppTab {
+    WindowTab {
         width: auto;
         height: 100%;
         margin: 0 1;
