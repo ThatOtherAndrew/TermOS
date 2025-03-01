@@ -40,16 +40,14 @@ Taskbar {
 }
 
 Button {
-    layout: horizontal;
-    width: 10%;
-    height: 10%;
     background: blue;
-    color: $footer-foreground;
-    padding: 0;
-    margin: 3;
+    color: white;
+    padding: 1;
     text-align: center;
+    min-width: 10;
+    margin: 2 4;
 }
 
 Button:hover {
-    background: darkblue;
+    background: rgba(0, 0, 255, 0.3);
 }
