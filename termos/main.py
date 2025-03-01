@@ -22,7 +22,6 @@ class TermOS(TextualApp):
     def __init__(self):
         super().__init__()
         self.os_apps: list[OSApp] = [Notepad(self)]
-        self.windows = []
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -35,7 +34,6 @@ class TermOS(TextualApp):
     @on(OSApp.WindowCreated)
     def on_window_created(self, message: OSApp.WindowCreated) -> None:
         self.windows.append(message.window)
-        self.log(message)
         self.mutate_reactive(TermOS.windows)
         message.stop()
 

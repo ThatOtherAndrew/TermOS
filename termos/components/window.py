@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, Container
-from textual.reactive import reactive
+from textual.reactive import reactive, Reactive
 from textual.widget import Widget
 from textual.widgets import Label
 
@@ -22,18 +22,18 @@ class TitleBarButton(Widget):
 
 
 class TitleBar(HorizontalGroup):
-    title = reactive(str)
-    icon = reactive(str)
+    title: Reactive[str | None] = reactive(str)
+    icon: Reactive[str | None] = reactive(str)
 
-    def __init__(self, title: str, icon: str) -> None:
+    def __init__(self, title: str | None, icon: str | None) -> None:
         super().__init__()
         self.title = title
         self.icon = icon
 
     def compose(self) -> ComposeResult:
-        if self.icon:
+        if self.icon is not None:
             yield Label(self.icon)
-        if self.title:
+        if self.title is not None:
             yield Label(self.title)
         with HorizontalGroup(classes='window-controls'):
             yield TitleBarButton("🗕", classes="window-minimise")
@@ -42,15 +42,15 @@ class TitleBar(HorizontalGroup):
 
 
 class Window(Container):
-    title = reactive(str)
-    icon = reactive(str)
+    title: Reactive[str | None] = reactive(str)
+    icon: Reactive[str | None] = reactive(str)
 
     def __init__(
         self,
         parent_app: OSApp,
         content: ComposeResult,
-        title: str = '',
-        icon: str = '',
+        title: str | None = None,
+        icon: str | None = None,
         width: int | str = 'auto',
         height: int | str = 'auto',
     ) -> None:

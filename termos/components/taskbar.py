@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from textual import events
 from textual.app import ComposeResult, RenderResult
-from textual.containers import HorizontalGroup
+from textual.containers import HorizontalGroup, Horizontal
 from textual.reactive import reactive
 from textual.widget import Widget
 
@@ -49,18 +49,21 @@ class WindowTab(Widget):
         return ' '.join(filter(None, [self.window.icon, self.window.title]))
 
 
-class Taskbar(HorizontalGroup, can_focus=False, can_focus_children=False):
+class Taskbar(HorizontalGroup):
     app: TermOS
-    windows = reactive(list[Window])
+    windows = reactive(list[Window], recompose=True)
 
     def __init__(self) -> None:
         super().__init__()
 
     def compose(self) -> ComposeResult:
+        self.log('recomposing', self.windows)
         yield StartButton()
 
-        for window in self.windows:
-            yield WindowTab(window)
+        with Horizontal():
+            for window in self.windows:
+                self.log(window.icon, window.title)
+                yield WindowTab(window)
 
         yield Clock()
 

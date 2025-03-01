@@ -33,11 +33,16 @@ class OSApp(abc.ABC):
     def create_window(
         self,
         content: ComposeResult,
-        title: str = NAME,
-        icon: str = ICON,
+        title: str | None | Ellipsis = ...,
+        icon: str | None | Ellipsis = ...,
         width: int | str = 'auto',
         height: int | str = 'auto'
     ) -> Window:
+        if title is Ellipsis:
+            title = self.NAME
+        if icon is Ellipsis:
+            icon = self.ICON
+
         window = Window(self, content, title, icon, width, height)
         self.os.query_one('.desktop').mount(window)
         window.post_message(self.WindowCreated(window))
