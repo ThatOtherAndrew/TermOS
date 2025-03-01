@@ -5,16 +5,17 @@ from textual.app import App as TextualApp
 from textual.app import ComposeResult
 from textual.containers import Container
 from textual.reactive import var
-from textual.widgets import Header
 
 from termos.apps import OSApp
 from termos.apps.base import tcss_paths
 from termos.apps.notepad import Notepad
+from termos.components.menu_bar import MenuBar
 from termos.components.taskbar import Taskbar
 from termos.components.window import Window
 
 
 class TermOS(TextualApp):
+    TITLE = "TermOS"
     CSS_PATH = ["style.tcss", *tcss_paths()]
 
     windows = var(list[Window])
@@ -24,7 +25,7 @@ class TermOS(TextualApp):
         self.os_apps: list[OSApp] = [Notepad(self)]
 
     def compose(self) -> ComposeResult:
-        yield Header()
+        yield MenuBar()
         yield Container(classes='desktop')
         yield Taskbar().data_bind(TermOS.windows)
 

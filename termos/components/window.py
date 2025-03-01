@@ -32,9 +32,9 @@ class TitleBar(HorizontalGroup):
 
     def compose(self) -> ComposeResult:
         if self.icon is not None:
-            yield Label(self.icon)
+            yield Label(self.icon, classes='window-icon')
         if self.title is not None:
-            yield Label(self.title)
+            yield Label(self.title, classes='window-title')
         with HorizontalGroup(classes='window-controls'):
             yield TitleBarButton("🗕", classes="window-minimise")
             yield TitleBarButton("🗖", classes="window-maximise")

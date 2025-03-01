@@ -1,3 +1,12 @@
+MenuBar {
+    dock: top;
+    width: 100%;
+    background: $panel;
+    color: $text-muted;
+    height: 1;
+    content-align-horizontal: center;
+}
+
 Taskbar {
     layout: horizontal;
     width: 100%;
@@ -54,13 +63,25 @@ TitleBar {
     background: $primary;
     align-horizontal: center;
 
-    Label {
+    .window-icon {
+        dock: left;
+        width: 2;
         margin-left: 1;
+        margin-right: 3;
     }
 
     HorizontalGroup {
         width: auto;
         dock: right;
+    }
+
+    TitleBarButton {
+        width: 2;
+        margin: 0;
+    }
+
+    TitleBarButton:hover {
+        background: $accent;
     }
 }
 

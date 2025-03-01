@@ -57,12 +57,10 @@ class Taskbar(HorizontalGroup):
         super().__init__()
 
     def compose(self) -> ComposeResult:
-        self.log('recomposing', self.windows)
         yield StartButton()
 
         with Horizontal(classes='tabs-container'):
             for window in self.windows:
-                self.log(window.icon, window.title)
                 yield WindowTab(window)
 
         yield Clock()
