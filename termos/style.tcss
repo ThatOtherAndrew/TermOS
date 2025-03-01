@@ -18,3 +18,18 @@ Taskbar {
         padding: 1 1 1 0;
     }
 }
+
+Button {
+    layout: horizontal;
+    width: 10%;
+    height: 10%;
+    background: blue;
+    color: $footer-foreground;
+    padding: 0;
+    margin: 3;
+    text-align: center;
+}
+
+Button:hover {
+    background: darkblue;
+}
