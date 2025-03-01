@@ -1,8 +1,15 @@
-from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer
+from textual.app import App as TextualApp, ComposeResult
+from textual.widgets import Header
+
+from termos.apps import App
+from termos.components.taskbar import Taskbar
 
 
-class TermOS(App):
+class TermOS(TextualApp):
+    def __init__(self):
+        super().__init__()
+        self.os_apps: list[App] = [App('app-foo'), App('app-bar'), App('app-baz')]
+
     def compose(self) -> ComposeResult:
         yield Header()
-        yield Footer()
+        yield Taskbar()
