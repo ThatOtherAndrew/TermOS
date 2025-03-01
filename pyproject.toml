@@ -3,4 +3,11 @@ name = "hacklondon"
 version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "textual>=2.1.2",
+]
+
+[dependency-groups]
+dev = [
+    "textual-dev>=1.7.0",
+]
