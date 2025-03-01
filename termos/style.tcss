@@ -39,6 +39,31 @@ Taskbar {
     }
 }
 
+Window {
+    width: auto;
+    height: auto;
+    background: $surface;
+}
+
+TitleBar {
+    background: $primary;
+
+    Label {
+        margin-left: 1;
+    }
+
+    HorizontalGroup {
+        width: auto;
+        dock: right;
+    }
+}
+
+TitleBarButton {
+    width: 1;
+    height: 1;
+    margin: 0 1;
+}
+
 Button {
     background: blue;
     color: white;

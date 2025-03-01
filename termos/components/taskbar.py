@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from textual import events
 from textual.app import ComposeResult, RenderResult
-from textual.containers import ScrollableContainer
+from textual.containers import HorizontalGroup
 from textual.reactive import reactive
 from textual.widget import Widget
 
@@ -46,10 +46,10 @@ class AppTab(Widget):
         self.os_app = app
 
     def render(self) -> RenderResult:
-        return self.os_app.name
+        return self.os_app.NAME
 
 
-class Taskbar(ScrollableContainer, can_focus=False, can_focus_children=False):
+class Taskbar(HorizontalGroup, can_focus=False, can_focus_children=False):
     app: TermOS
 
     def __init__(self) -> None:

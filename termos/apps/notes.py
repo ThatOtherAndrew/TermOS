@@ -1,14 +1,18 @@
-from textual.widget import Widget
-from textual.widgets import TextArea, Button, Static
+from textual.app import ComposeResult
 from textual.containers import Vertical
+from textual.widgets import TextArea, Button, Label
+
+from termos.apps import OSApp
 
 
-class Notes(Widget):
+class NotesApp(OSApp):
     """A Notes App Widget for the OS."""
 
-    def compose(self):
-        yield Vertical(
-            Static("Notes App", classes="title"),
-            TextArea(id="note_area"),
-            Button("Save Note", id="save_button"),
-        )
+    NAME = "Notes"
+    ICON = "📝"
+
+    def content(self) -> ComposeResult:
+        with Vertical():
+            yield Label("Notes App", classes="title")
+            yield TextArea(id="note_area")
+            yield Button("Save Note", id="save_button")
