@@ -47,6 +47,7 @@ Window {
 
 TitleBar {
     background: $primary;
+    align-horizontal: center;
 
     Label {
         margin-left: 1;
@@ -62,17 +63,4 @@ TitleBarButton {
     width: 1;
     height: 1;
     margin: 0 1;
-}
-
-Button {
-    background: blue;
-    color: white;
-    padding: 1;
-    text-align: center;
-    min-width: 10;
-    margin: 2 4;
-}
-
-Button:hover {
-    background: rgba(0, 0, 255, 0.3);
 }
