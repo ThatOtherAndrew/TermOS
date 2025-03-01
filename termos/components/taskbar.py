@@ -60,7 +60,7 @@ class Taskbar(HorizontalGroup):
         self.log('recomposing', self.windows)
         yield StartButton()
 
-        with Horizontal():
+        with Horizontal(classes='tabs-container'):
             for window in self.windows:
                 self.log(window.icon, window.title)
                 yield WindowTab(window)

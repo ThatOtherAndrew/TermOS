@@ -5,7 +5,7 @@ Taskbar {
     dock: bottom;
     background: $panel;
 
-    * {
+    StartButton, WindowTab, Clock {
         width: auto;
         height: 100%;
         content-align-vertical: bottom;
@@ -17,6 +17,11 @@ Taskbar {
     StartButton {
         padding-left: 1;
         border-right: vkey $foreground 20%;
+    }
+
+    .tabs-container {
+        width: 100%;
+        margin: 0 1;
     }
 
     WindowTab {
