@@ -65,6 +65,16 @@ class Window(Container):
             super().__init__()
             self.window = window
 
+    class Minimised(Message):
+        def __init__(self, window: Window) -> None:
+            super().__init__()
+            self.window = window
+
+    class Maximised(Message):
+        def __init__(self, window: Window) -> None:
+            super().__init__()
+            self.window = window
+
     class Closed(Message):
         def __init__(self, window: Window) -> None:
             super().__init__()
@@ -74,12 +84,13 @@ class Window(Container):
         self,
         parent_app: OSApp,
         content: ComposeResult,
+        classes: str | None = None,
         title: str | None = None,
         icon: str | None = None,
         width: int | str = 'auto',
         height: int | str = 'auto',
     ) -> None:
-        super().__init__()
+        super().__init__(classes=classes)
         self.parent_app = parent_app
         self.content = content
         self.title = title

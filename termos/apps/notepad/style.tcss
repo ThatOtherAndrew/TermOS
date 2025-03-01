@@ -1,2 +1,10 @@
-Notepad {
+Window.notepad {
+    TextArea {
+        min-height: 3;
+    }
+
+    .buttons {
+        height: 3;
+        dock: bottom;
+    }
 }

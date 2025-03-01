@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Any, Generator, TYPE_CHECKING
 
 from textual.app import ComposeResult
-from textual.message import Message
 
 from termos.components.window import Window
 
@@ -28,6 +27,7 @@ class OSApp(abc.ABC):
     def create_window(
         self,
         content: ComposeResult,
+        classes: str | None = None,
         title: str | None | Ellipsis = ...,
         icon: str | None | Ellipsis = ...,
         width: int | str = 'auto',
@@ -38,7 +38,7 @@ class OSApp(abc.ABC):
         if icon is Ellipsis:
             icon = self.ICON
 
-        window = Window(self, content, title, icon, width, height)
+        window = Window(self, content, classes, title, icon, width, height)
         self.os.query_one('.desktop').mount(window)
         window.post_message(Window.Created(window))
         return window
