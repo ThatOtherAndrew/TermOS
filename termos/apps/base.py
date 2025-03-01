@@ -18,11 +18,6 @@ class OSApp(abc.ABC):
     ICON: str = '❓'
     DESCRIPTION: str = ''
 
-    class WindowCreated(Message):
-        def __init__(self, window: Window) -> None:
-            super().__init__()
-            self.window = window
-
     def __init__(self, os: TermOS):
         self.os = os
 
@@ -45,8 +40,12 @@ class OSApp(abc.ABC):
 
         window = Window(self, content, title, icon, width, height)
         self.os.query_one('.desktop').mount(window)
-        window.post_message(self.WindowCreated(window))
+        window.post_message(Window.Created(window))
         return window
+
+    # noinspection PyMethodMayBeStatic
+    def close_window(self, window: Window) -> None:
+        window.remove()
 
 
 def tcss_paths() -> Generator[str, Any, None]:

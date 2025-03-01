@@ -1,6 +1,6 @@
 import asyncio
 
-from textual import on, work
+from textual import work
 from textual.app import App as TextualApp
 from textual.app import ComposeResult
 from textual.containers import Container
@@ -18,11 +18,12 @@ class TermOS(TextualApp):
     TITLE = "TermOS"
     CSS_PATH = ["style.tcss", *tcss_paths()]
 
-    windows = var(list[Window])
+    windows: var[list[Window]] = var(list)
 
     def __init__(self):
         super().__init__()
         self.os_apps: list[OSApp] = [Notepad(self)]
+        self.windows: list[Window]
 
     def compose(self) -> ComposeResult:
         yield MenuBar()
@@ -32,9 +33,13 @@ class TermOS(TextualApp):
     async def on_mount(self) -> None:
         self.launch_notepad()
 
-    @on(OSApp.WindowCreated)
-    def on_window_created(self, message: OSApp.WindowCreated) -> None:
+    def on_window_created(self, message: Window.Created) -> None:
         self.windows.append(message.window)
+        self.mutate_reactive(TermOS.windows)
+        message.stop()
+
+    def on_window_closed(self, message: Window.Closed) -> None:
+        self.windows.remove(message.window)
         self.mutate_reactive(TermOS.windows)
         message.stop()
 

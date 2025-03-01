@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import TYPE_CHECKING
 
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, Container
+from textual.message import Message
 from textual.reactive import reactive, Reactive
 from textual.widget import Widget
 from textual.widgets import Label
@@ -13,12 +15,25 @@ if TYPE_CHECKING:
 
 
 class TitleBarButton(Widget):
-    def __init__(self, symbol: str, classes: str):
+    class Type(Enum):
+        MINIMISE = '🗕'
+        MAXIMISE = '🗖'
+        CLOSE = '🗙'
+
+    class Clicked(Message):
+        def __init__(self, button_type) -> None:
+            super().__init__()
+            self.type = button_type
+
+    def __init__(self, button_type: Type, classes: str):
         super().__init__(classes=classes)
-        self.symbol = symbol
+        self.type = button_type
 
     def render(self) -> str:
-        return self.symbol
+        return self.type.value
+
+    def on_click(self):
+        self.post_message(self.Clicked(self.type))
 
 
 class TitleBar(HorizontalGroup):
@@ -36,14 +51,24 @@ class TitleBar(HorizontalGroup):
         if self.title is not None:
             yield Label(self.title, classes='window-title')
         with HorizontalGroup(classes='window-controls'):
-            yield TitleBarButton("🗕", classes="window-minimise")
-            yield TitleBarButton("🗖", classes="window-maximise")
-            yield TitleBarButton("🗙", classes="window-close")
+            yield TitleBarButton(TitleBarButton.Type.MINIMISE, classes="window-minimise")
+            yield TitleBarButton(TitleBarButton.Type.MAXIMISE, classes="window-maximise")
+            yield TitleBarButton(TitleBarButton.Type.CLOSE, classes="window-close")
 
 
 class Window(Container):
     title: Reactive[str | None] = reactive(str)
     icon: Reactive[str | None] = reactive(str)
+
+    class Created(Message):
+        def __init__(self, window: Window) -> None:
+            super().__init__()
+            self.window = window
+
+    class Closed(Message):
+        def __init__(self, window: Window) -> None:
+            super().__init__()
+            self.window = window
 
     def __init__(
         self,
@@ -66,3 +91,12 @@ class Window(Container):
         yield TitleBar(self.title, self.icon)
         with Container(classes="window-body"):
             yield from self.content
+
+    def on_title_bar_button_clicked(self, message: TitleBarButton.Clicked):
+        if message.type is TitleBarButton.Type.MINIMISE:
+            ... # TODO
+        elif message.type is TitleBarButton.Type.MAXIMISE:
+            ... # TODO
+        elif message.type is TitleBarButton.Type.CLOSE:
+            self.parent_app.close_window(self)
+            self.post_message(self.Closed(self))
