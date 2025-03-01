@@ -1,11 +1,18 @@
+from __future__ import annotations
+
 import time
 
-from textual import events, widgets
+from typing import TYPE_CHECKING
+
+from textual import events
 from textual.app import ComposeResult, RenderResult
 from textual.containers import ScrollableContainer
 from textual.widget import Widget
 
 from termos.apps import App
+
+if TYPE_CHECKING:
+    from termos.app import TermOS
 
 
 class Clock(Widget):
@@ -29,16 +36,12 @@ class Clock(Widget):
         return self.time
 
 
-class TaskbarApp(Widget):
-    # language=SCSS
-    DEFAULT_CSS = """
-    TaskbarApp {
-        width: auto;
-        height: auto;
-        border: round;
-    }
-    """
+class StartButton(Widget):
+    def render(self) -> RenderResult:
+        return '╭─╮\n╰─╯'
 
+
+class AppTab(Widget):
     def __init__(self, app: App) -> None:
         super().__init__()
         self.os_app = app
@@ -48,14 +51,16 @@ class TaskbarApp(Widget):
 
 
 class Taskbar(ScrollableContainer, can_focus=False, can_focus_children=False):
-    ALLOW_SELECT = False
+    app: TermOS
 
     def __init__(self) -> None:
         super().__init__()
 
     def compose(self) -> ComposeResult:
+        yield StartButton()
+
         for app in self.app.os_apps:
-            yield TaskbarApp(app)
+            yield AppTab(app)
         yield Clock()
 
     def _on_mouse_scroll_down(self, event: events.MouseScrollDown) -> None:
