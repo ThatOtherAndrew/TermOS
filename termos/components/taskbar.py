@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import time
-
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 from textual import events
 from textual.app import ComposeResult, RenderResult
 from textual.containers import ScrollableContainer
+from textual.reactive import reactive
 from textual.widget import Widget
 
 from termos.apps import App
@@ -16,10 +16,11 @@ if TYPE_CHECKING:
 
 
 class Clock(Widget):
+    time = reactive(str)
+
     def __init__(self) -> None:
         """Initialize the clock widget."""
         super().__init__()
-        self.time = '00:00:00'
 
     def on_mount(self) -> None:
         """Start updating the time every second."""
@@ -28,9 +29,7 @@ class Clock(Widget):
 
     def update_time(self) -> None:
         """Fetch the current time and update the display."""
-        current_time = time.localtime()
-        self.time = f"{current_time.tm_hour:02}:{current_time.tm_min:02}:{current_time.tm_sec:02}"  # Update the UI
-        self.refresh()  # Refresh the widget to reflect the change
+        self.time = datetime.now().strftime('%H:%M:%S\n%d/%m/%y')
 
     def render(self) -> RenderResult:
         return self.time
