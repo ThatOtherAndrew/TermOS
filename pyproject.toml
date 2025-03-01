@@ -1,7 +1,7 @@
 [project]
-name = "hacklondon"
+name = "termos"
 version = "0.1.0"
-description = "Add your description here"
+description = "An operating system in your terminal"
 requires-python = ">=3.12"
 dependencies = [
     "textual>=2.1.2",
@@ -11,3 +11,6 @@ dependencies = [
 dev = [
     "textual-dev>=1.7.0",
 ]
+
+[project.scripts]
+termos = "termos.__main__:main"
