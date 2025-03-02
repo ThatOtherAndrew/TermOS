@@ -10,7 +10,7 @@ from textual.containers import HorizontalGroup, Container
 from textual.css.query import NoMatches
 from textual.geometry import Offset
 from textual.message import Message
-from textual.reactive import reactive, Reactive
+from textual.reactive import reactive, Reactive, var
 from textual.widget import Widget
 from textual.widgets import Label
 
@@ -65,12 +65,13 @@ class TitleBar(HorizontalGroup):
 
 
 class Window(Container):
-    title: Reactive[str | None] = reactive(str)
-    icon: Reactive[str | None] = reactive(str)
-    minimised = reactive(bool)
-    maximised = reactive(bool)
-    width: Reactive[int | str] = reactive('auto')
-    height: Reactive[int | str] = reactive('auto')
+    title: var[str | None] = var(str)
+    icon: var[str | None] = var(str)
+    minimised = var(bool)
+    maximised = var(bool)
+    width: var[int | str] = var('auto')
+    height: var[int | str] = var('auto')
+    offset: var[tuple[int, int]] = var((0, 0))
 
     class Created(Message):
         def __init__(self, window: Window) -> None:
@@ -136,10 +137,12 @@ class Window(Container):
         if new:
             self.styles.width = '100%'
             self.styles.height = '100%'
+            self.styles.offset = (0, 0)
             self.post_message(self.Maximised(self))
         else:
             self.styles.width = self.width
             self.styles.height = self.height
+            self.styles.offset = self.offset
             self.post_message(self.Restored(self))
 
     def watch_width(self, new: int | str) -> None:
@@ -149,6 +152,10 @@ class Window(Container):
     def watch_height(self, new: int | str) -> None:
         self.maximised = False
         self.styles.height = new
+
+    def watch_offset(self, new: tuple[int, int]) -> None:
+        self.maximised = False
+        self.styles.offset = new
 
     def on_title_bar_button_clicked(self, message: TitleBarButton.Clicked):
         if message.type is TitleBarButton.Type.MINIMISE:
@@ -166,14 +173,12 @@ class Window(Container):
         if event.button != 1:
             return
 
-        # continue only if not maximised
-        if self.maximised:
-            return
-
         # continue only if mouse down on title bar
         widget, _ = self.screen.get_widget_at(*event.screen_offset)
-        if widget not in self.query('TitleBar, Label'):
+        if widget not in self.query('TitleBar, TitleBar Label'):
             return
+
+        self.add_class('dragging')
 
         self.mouse_at_drag_start = event.screen_offset
         self.offset_at_drag_start = Offset(
@@ -188,7 +193,16 @@ class Window(Container):
             self.mouse_at_drag_start is not None
             and self.offset_at_drag_start is not None
         ):
-            self.styles.offset = (
+            # adjust window position when snapping out of maximised mode
+            if self.maximised:
+                x_ratio = event.screen_x / self.screen.size.width
+                x_offset = x_ratio * self.width
+                self.offset_at_drag_start = Offset(
+                    event.screen_x - x_offset,
+                    self.offset_at_drag_start.y,
+                    )
+
+            self.offset = (
                 self.offset_at_drag_start.x + event.screen_x - self.mouse_at_drag_start.x,
                 self.offset_at_drag_start.y + event.screen_y - self.mouse_at_drag_start.y,
             )
@@ -196,6 +210,7 @@ class Window(Container):
     def on_mouse_up(self) -> None:
         self.mouse_at_drag_start = None
         self.offset_at_drag_start = None
+        self.remove_class('dragging')
         self.release_mouse()
         # self.constrain_to_screen()
         self.can_focus = True
