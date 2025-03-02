@@ -23,7 +23,8 @@ class TermOS(TextualApp):
 
     def __init__(self):
         super().__init__()
-        self.os_apps: list[OSApp] = [Notepad(self)]
+        self.os_apps: list[type[OSApp]] = [Notepad]
+        self.processes: list[OSApp] = []
         self.windows: list[Window]
 
     def compose(self) -> ComposeResult:
@@ -34,6 +35,12 @@ class TermOS(TextualApp):
     async def on_mount(self) -> None:
         self.launch_notepad()
 
+    def on_app_launched(self, app: type[OSApp]) -> None:
+        self.notify(f'Launched {app.NAME}')
+
+    def on_app_killed(self, app: type[OSApp]) -> None:
+        self.notify(f'Closed {app.NAME}')
+
     def on_window_created(self, message: Window.Created) -> None:
         self.windows.append(message.window)
         self.mutate_reactive(TermOS.windows)
@@ -42,9 +49,12 @@ class TermOS(TextualApp):
     def on_window_closed(self, message: Window.Closed) -> None:
         self.windows.remove(message.window)
         self.mutate_reactive(TermOS.windows)
+        message.window.parent_app.on_window_close(message.window)
         message.stop()
 
     @work
     async def launch_notepad(self) -> None:
         await asyncio.sleep(1)
-        self.os_apps[0].launch()
+        self.os_apps[0].launch(self)
+        await asyncio.sleep(1)
+        self.os_apps[0].launch(self)

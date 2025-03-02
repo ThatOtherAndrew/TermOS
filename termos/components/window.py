@@ -118,6 +118,9 @@ class Window(Container):
         with Container(classes="window-body"):
             yield self.content
 
+    def on_mount(self) -> None:
+        self.post_message(Window.Created(self))
+
     def watch_minimised(self, new: bool) -> None:
         self.styles.display = 'none' if new else 'block'
         self.post_message(self.Minimised(self))
@@ -149,5 +152,4 @@ class Window(Container):
         elif message.type is TitleBarButton.Type.MAXIMISE:
             self.maximised = not self.maximised
         elif message.type is TitleBarButton.Type.CLOSE:
-            self.parent_app.close_window(self)
             self.post_message(self.Closed(self))

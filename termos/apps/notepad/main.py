@@ -1,9 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from textual.app import ComposeResult
 from textual.containers import Center, HorizontalScroll
 from textual.widget import Widget
 from textual.widgets import TextArea, Button, Label
 
 from termos.apps import OSApp
+
+if TYPE_CHECKING:
+    from termos.main import TermOS
 
 
 class NotepadWidget(Widget):
@@ -21,5 +28,7 @@ class Notepad(OSApp):
     ICON = '📝'
     DESCRIPTION = 'Simple text editor'
 
-    def launch(self) -> None:
-        self.create_window(NotepadWidget(), 'notepad', width=50, height=20)
+    @staticmethod
+    def launch(os: TermOS) -> None:
+        instance = Notepad(os)
+        instance.create_window(NotepadWidget(), 'notepad', width=50, height=20)

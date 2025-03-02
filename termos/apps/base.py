@@ -19,9 +19,12 @@ class OSApp(abc.ABC):
 
     def __init__(self, os: TermOS):
         self.os = os
+        self.os.processes.append(self)
+        self.os.on_app_launched(self.__class__)
 
+    @staticmethod
     @abc.abstractmethod
-    def launch(self) -> None:
+    def launch(os: TermOS) -> None:
         pass
 
     def create_window(
@@ -40,12 +43,17 @@ class OSApp(abc.ABC):
 
         window = Window(self, content, classes, title, icon, width, height)
         self.os.query_one('.desktop').mount(window)
-        window.post_message(Window.Created(window))
         return window
 
-    # noinspection PyMethodMayBeStatic
-    def close_window(self, window: Window) -> None:
+    def on_window_close(self, window: Window) -> None:
         window.remove()
+        # Kill the app if it has no remaining windows open
+        if not any(window.parent_app is self for window in self.os.windows):
+            self.kill()
+
+    def kill(self) -> None:
+        self.os.processes.remove(self)
+        self.os.on_app_killed(self.__class__)
 
 
 def tcss_paths() -> Generator[str, Any, None]:
