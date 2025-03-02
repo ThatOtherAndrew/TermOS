@@ -21,7 +21,7 @@ class TermOS(TextualApp):
 
     def __init__(self):
         super().__init__()
-        self.os_apps: list[type[OSApp]] = [Notepad, FileManager]
+        self.os_apps: list[type[OSApp]] = [Notepad]
         self.processes: list[OSApp] = []
         self.windows: list[Window]
 
@@ -33,14 +33,13 @@ class TermOS(TextualApp):
     def on_mount(self) -> None:
         # TODO: remove this
         self.os_apps[0].launch(self)
-        # for app in self.os_apps:
-        #     app.launch(self)
+        self.os_apps[0].launch(self)
 
     def on_app_launched(self, app: type[OSApp]) -> None:
-        self.notify(f'Launched {app.NAME}')
+        pass
 
     def on_app_killed(self, app: type[OSApp]) -> None:
-        self.notify(f'Closed {app.NAME}')
+        pass
 
     def on_window_created(self, message: Window.Created) -> None:
         self.windows.append(message.window)
