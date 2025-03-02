@@ -1,5 +1,5 @@
 Screen {
-    layers: desktop windows taskbar start-menu
+    layers: desktop windows taskbar start-menu;
 }
 
 MenuBar {
