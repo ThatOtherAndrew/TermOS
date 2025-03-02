@@ -59,6 +59,22 @@ Taskbar {
     }
 }
 
+StartMenu {
+    layer: start-menu;
+    dock: bottom;
+    margin-bottom: 2;
+
+    &, * {
+        width: auto;
+        height: auto;
+    }
+
+    ListItem {
+        height: 3;
+        padding: 1 2;
+    }
+}
+
 .desktop {
     layer: desktop;
     hatch: right $secondary 50%;
@@ -116,4 +132,8 @@ TitleBarButton {
     width: 1;
     height: 1;
     margin: 0 1;
+}
+
+Tooltip {
+    padding: 0;
 }

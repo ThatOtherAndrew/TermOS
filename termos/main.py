@@ -5,9 +5,9 @@ from textual.reactive import var
 
 from termos.apps import OSApp
 from termos.apps.base import tcss_paths
-from termos.apps.fileManager import FileManager
 from termos.apps.notepad import Notepad
 from termos.components.menu_bar import MenuBar
+from termos.components.start_menu import StartMenu
 from termos.components.taskbar import Taskbar
 from termos.components.window import Window
 
@@ -28,12 +28,8 @@ class TermOS(TextualApp):
     def compose(self) -> ComposeResult:
         yield MenuBar()
         yield Container(id='window-container', classes='desktop')
+        yield StartMenu()
         yield Taskbar().data_bind(TermOS.windows)
-
-    def on_mount(self) -> None:
-        # TODO: remove this
-        self.os_apps[0].launch(self)
-        self.os_apps[0].launch(self)
 
     def on_app_launched(self, app: type[OSApp]) -> None:
         pass

@@ -10,6 +10,7 @@ from textual.containers import HorizontalGroup, Horizontal
 from textual.reactive import reactive
 from textual.widget import Widget
 
+from termos.components.start_menu import StartMenu
 from termos.components.window import Window
 
 if TYPE_CHECKING:
@@ -42,7 +43,8 @@ class StartButton(Widget):
 
     async def on_click(self, event: events.MouseEvent) -> None:
         if event.button == 1:
-            ... # TODO: launch start menu
+            start_menu = self.app.query_one(StartMenu)
+            start_menu.visible = not start_menu.visible
         elif event.button == 3:
             await self.run_action('app.command_palette')
 
