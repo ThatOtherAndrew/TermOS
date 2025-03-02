@@ -63,15 +63,22 @@ StartMenu {
     layer: start-menu;
     dock: bottom;
     margin-bottom: 2;
+    border: double $secondary;
+    width: 40;
+    height: auto;
 
-    &, * {
-        width: auto;
+    ListView {
         height: auto;
     }
 
     ListItem {
-        height: 3;
-        padding: 1 2;
+        padding: 0 2;
+    }
+
+
+    .description {
+        margin-left: 3;
+        color: $text-muted;
     }
 }
 

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import abc
+from importlib import import_module
 from pathlib import Path
-from typing import Any, Generator, TYPE_CHECKING
+from typing import Generator, TYPE_CHECKING
 
 from textual.widget import Widget
 
@@ -56,8 +57,29 @@ class OSApp(abc.ABC):
         self.os.on_app_killed(self.__class__)
 
 
-def tcss_paths() -> Generator[str, Any, None]:
+def tcss_paths() -> Generator[str, None, None]:
     for app_dir in Path(__file__).parent.glob('*/*.tcss'):
         app_dir: Path
         if app_dir.is_file():
             yield app_dir.as_posix()
+
+
+def apps() -> Generator[type[OSApp], None, None]:
+    for app_dir in Path(__file__).parent.iterdir():
+        app_dir: Path
+        if not app_dir.is_dir():
+            continue
+        init_file = app_dir / '__init__.py'
+        if not init_file.is_file():
+            continue
+        try:
+            module = import_module(f'termos.apps.{app_dir.name}.__init__')
+        except ImportError:
+            continue
+
+        for name in dir(module):
+            if name.startswith('_'):
+                continue
+            obj = getattr(module, name)
+            if issubclass(obj, OSApp):
+                yield obj
