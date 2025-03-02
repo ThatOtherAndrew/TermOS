@@ -24,8 +24,8 @@ class DTPane(Container):
     @on(Button.Pressed, "#npbtn")
     def open_np(self) -> None:
         """Handle Notepad button click and launch the Notepad app."""
-        self.app.os_apps[0].launch()
+        self.app.os_apps[0].launch(self.app)
 
     @on(Button.Pressed, "#fmbtn")
     def open_fm(self) -> None:
-        self.app.os_apps[1].launch()
+        self.app.os_apps[1].launch(self.app)

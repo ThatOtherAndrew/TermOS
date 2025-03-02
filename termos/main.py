@@ -1,6 +1,3 @@
-import asyncio
-
-from textual import work
 from textual.app import App as TextualApp
 from textual.app import ComposeResult
 from textual.containers import Container
@@ -8,8 +5,8 @@ from textual.reactive import var
 
 from termos.apps import OSApp
 from termos.apps.base import tcss_paths
-from termos.apps.notepad import Notepad
 from termos.apps.fileManager import FileManager
+from termos.apps.notepad import Notepad
 from termos.components.desktop import DTPane
 from termos.components.menu_bar import MenuBar
 from termos.components.taskbar import Taskbar

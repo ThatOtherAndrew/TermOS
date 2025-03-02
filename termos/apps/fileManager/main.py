@@ -1,9 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from textual import on
 from textual.app import ComposeResult
 from textual.widget import Widget
 from textual.widgets import Button
 from termos.apps.fileManager.fileManager import SubPanes
 from termos.apps import OSApp
+
+if TYPE_CHECKING:
+    from termos.main import TermOS
 
 
 class FileManagerWidget(Widget):
@@ -41,5 +48,7 @@ class FileManager(OSApp):
     ICON = '🗂️'
     DESCRIPTION = 'Browse and manage files'
 
-    def launch(self) -> None:
-        self.create_window(FileManagerWidget(), 'file-manager', width=50, height=20)
+    @staticmethod
+    def launch(os: TermOS) -> None:
+        instance = FileManager(os)
+        instance.create_window(FileManagerWidget(), 'file-manager', width=50, height=20)
