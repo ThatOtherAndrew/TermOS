@@ -7,7 +7,6 @@ from termos.apps import OSApp
 from termos.apps.base import tcss_paths
 from termos.apps.fileManager import FileManager
 from termos.apps.notepad import Notepad
-from termos.components.desktop import DTPane
 from termos.components.menu_bar import MenuBar
 from termos.components.taskbar import Taskbar
 from termos.components.window import Window
@@ -28,9 +27,14 @@ class TermOS(TextualApp):
 
     def compose(self) -> ComposeResult:
         yield MenuBar()
-        with Container(classes='desktop'):
-            yield DTPane()
+        yield Container(id='window-container', classes='desktop')
         yield Taskbar().data_bind(TermOS.windows)
+
+    def on_mount(self) -> None:
+        # TODO: remove this
+        self.os_apps[0].launch(self)
+        # for app in self.os_apps:
+        #     app.launch(self)
 
     def on_app_launched(self, app: type[OSApp]) -> None:
         self.notify(f'Launched {app.NAME}')

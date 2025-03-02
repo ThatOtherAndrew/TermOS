@@ -42,7 +42,7 @@ class OSApp(abc.ABC):
             icon = self.ICON
 
         window = Window(self, content, classes, title, icon, width, height)
-        self.os.query_one('.desktop').mount(window)
+        self.os.query_one('#window-container').mount(window)
         return window
 
     def on_window_close(self, window: Window) -> None:

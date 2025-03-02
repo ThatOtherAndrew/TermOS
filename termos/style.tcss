@@ -1,4 +1,9 @@
+Screen {
+    layers: desktop windows taskbar start-menu
+}
+
 MenuBar {
+    layer: taskbar;
     dock: top;
     width: 100%;
     background: $panel;
@@ -7,11 +12,8 @@ MenuBar {
     content-align-horizontal: center;
 }
 
-.desktop {
-    hatch: right $secondary 50%;
-}
-
 Taskbar {
+    layer: taskbar;
     layout: horizontal;
     width: 100%;
     height: 2;
@@ -57,11 +59,21 @@ Taskbar {
     }
 }
 
-Window {
-    width: auto;
-    height: auto;
-    background: $surface;
-    position: absolute;
+.desktop {
+    layer: desktop;
+    hatch: right $secondary 50%;
+}
+
+#window-container {
+    layer: taskbar;
+
+    Window {
+        layer: windows;
+        width: auto;
+        height: auto;
+        background: $surface;
+        position: absolute;
+    }
 }
 
 TitleBar {
