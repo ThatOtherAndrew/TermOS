@@ -59,6 +59,10 @@ class TitleBar(HorizontalGroup):
 class Window(Container):
     title: Reactive[str | None] = reactive(str)
     icon: Reactive[str | None] = reactive(str)
+    minimised = reactive(bool)
+    maximised = reactive(bool)
+    width: Reactive[int | str] = reactive('auto')
+    height: Reactive[int | str] = reactive('auto')
 
     class Created(Message):
         def __init__(self, window: Window) -> None:
@@ -71,6 +75,11 @@ class Window(Container):
             self.window = window
 
     class Maximised(Message):
+        def __init__(self, window: Window) -> None:
+            super().__init__()
+            self.window = window
+
+    class Restored(Message):
         def __init__(self, window: Window) -> None:
             super().__init__()
             self.window = window
@@ -95,19 +104,42 @@ class Window(Container):
         self.content = content
         self.title = title
         self.icon = icon
-        self.styles.width = width
-        self.styles.height = height
+        self.width = width
+        self.height = height
 
     def compose(self) -> ComposeResult:
         yield TitleBar(self.title, self.icon)
         with Container(classes="window-body"):
             yield from self.content
 
+    def watch_minimised(self, new: bool) -> None:
+        self.styles.display = 'none' if new else 'block'
+        self.post_message(self.Minimised(self))
+
+    def watch_maximised(self, new: bool) -> None:
+        self.minimised = False
+        if new:
+            self.styles.width = '100%'
+            self.styles.height = '100%'
+            self.post_message(self.Maximised(self))
+        else:
+            self.styles.width = self.width
+            self.styles.height = self.height
+            self.post_message(self.Restored(self))
+
+    def watch_width(self, new: int | str) -> None:
+        self.maximised = False
+        self.styles.width = new
+
+    def watch_height(self, new: int | str) -> None:
+        self.maximised = False
+        self.styles.height = new
+
     def on_title_bar_button_clicked(self, message: TitleBarButton.Clicked):
         if message.type is TitleBarButton.Type.MINIMISE:
-            ... # TODO
+            self.minimised = True
         elif message.type is TitleBarButton.Type.MAXIMISE:
-            ... # TODO
+            self.maximised = not self.maximised
         elif message.type is TitleBarButton.Type.CLOSE:
             self.parent_app.close_window(self)
             self.post_message(self.Closed(self))

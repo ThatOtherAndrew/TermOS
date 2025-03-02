@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
+from rich.text import Text
 from textual import events
 from textual.app import ComposeResult, RenderResult
 from textual.containers import HorizontalGroup, Horizontal
@@ -44,12 +45,31 @@ class StartButton(Widget):
 
 
 class WindowTab(Widget):
+    italicised = reactive(False)
+
     def __init__(self, window: Window) -> None:
         super().__init__()
         self.window = window
 
+    def on_mount(self) -> None:
+        def set_italicised(minimised: bool):
+            self.italicised = minimised
+
+        self.watch(self.window, 'minimised', set_italicised)
+
     def render(self) -> RenderResult:
-        return ' '.join(filter(None, [self.window.icon, self.window.title]))
+        parts = []
+        if self.window.icon is not None:
+            parts.append(Text(self.window.icon))
+        if self.window.title is not None:
+            parts.append(Text(
+                self.window.title,
+                style='italic' if self.italicised else ''
+            ))
+        return Text(' ').join(parts or [Text('...')])
+
+    def on_click(self) -> None:
+        self.window.minimised = not self.window.minimised
 
 
 class Taskbar(HorizontalGroup):
