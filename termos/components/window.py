@@ -167,7 +167,6 @@ class Window(Container):
 
     def on_mouse_down(self, event: events.MouseDown) -> None:
         # self.bring_to_front()
-        self.focus()
 
         # continue only on left click
         if event.button != 1:
@@ -178,6 +177,7 @@ class Window(Container):
         if widget not in self.query('TitleBar, TitleBar Label'):
             return
 
+        self.focus()
         self.add_class('dragging')
 
         self.mouse_at_drag_start = event.screen_offset

@@ -73,6 +73,16 @@ Taskbar {
         height: auto;
         background: $surface;
         position: absolute;
+        box-sizing: content-box;
+    }
+
+    Window.dragging {
+        TitleBar {
+            background: $primary-lighten-1;
+            TitleBarButton:hover {
+                background: $primary-lighten-1;
+            }
+        }
     }
 }
 
