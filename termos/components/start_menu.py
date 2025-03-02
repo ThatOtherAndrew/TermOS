@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from rich.text import Text
 from textual.app import ComposeResult
 from textual.reactive import var
 from textual.widget import Widget

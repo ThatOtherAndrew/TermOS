@@ -64,7 +64,7 @@ StartMenu {
     dock: bottom;
     margin-bottom: 2;
     border: double $secondary;
-    width: 40;
+    width: 50;
     height: auto;
 
     ListView {
