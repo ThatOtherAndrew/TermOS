@@ -207,11 +207,11 @@ class Window(Container):
             # adjust window position when snapping out of maximised mode
             if self.maximised:
                 x_ratio = event.screen_x / self.screen.size.width
-                x_offset = x_ratio * self.width
+                x_offset = x_ratio * self.size.width
                 self.offset_at_drag_start = Offset(
-                    event.screen_x - x_offset,
+                    int(event.screen_x - x_offset),
                     self.offset_at_drag_start.y,
-                    )
+                )
 
             self.offset = (
                 self.offset_at_drag_start.x + event.screen_x - self.mouse_at_drag_start.x,

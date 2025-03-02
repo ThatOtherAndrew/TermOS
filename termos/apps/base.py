@@ -47,13 +47,13 @@ class OSApp(abc.ABC):
         window.focus()
         return window
 
-    def on_window_close(self, window: Window) -> None:
-        window.remove()
+    async def on_window_close(self, window: Window) -> None:
+        await window.remove()
         # Kill the app if it has no remaining windows open
         if not any(window.parent_app is self for window in self.os.windows):
-            self.kill()
+            await self.kill()
 
-    def kill(self) -> None:
+    async def kill(self) -> None:
         self.os.processes.remove(self)
         self.os.on_app_killed(self.__class__)
 

@@ -54,9 +54,9 @@ class QuickSettings(Widget):
     def on_select_changed(self, message: Select.Changed) -> None:
         self.app.theme = message.value
 
-    def on_button_pressed(self, message: Button.Pressed) -> None:
+    async def on_button_pressed(self, message: Button.Pressed) -> None:
         for process in self.app.processes:
-            process.kill()
+            await process.kill()
         if message.button.id == 'poweroff':
             self.app.exit()
         elif message.button.id == 'restart':

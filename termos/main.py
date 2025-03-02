@@ -43,8 +43,8 @@ class TermOS(TextualApp):
         self.mutate_reactive(TermOS.windows)
         message.stop()
 
-    def on_window_closed(self, message: Window.Closed) -> None:
+    async def on_window_closed(self, message: Window.Closed) -> None:
         self.windows.remove(message.window)
         self.mutate_reactive(TermOS.windows)
-        message.window.parent_app.on_window_close(message.window)
+        await message.window.parent_app.on_window_close(message.window)
         message.stop()
