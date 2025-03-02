@@ -17,7 +17,7 @@ class DTPane(Container):
 
     def compose(self) -> ComposeResult:
         """Create taskbar-style buttons and a container for the file list."""
-        yield Button("FolderManager", id="fmbtn")
+        yield Button("FileManager", id="fmbtn")
         yield Button("NotePad", id="npbtn")
             #yield Button("Settings", id="sbtn")
 
