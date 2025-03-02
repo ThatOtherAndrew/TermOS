@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from rich.text import Text
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup
+from textual.geometry import Offset
 from textual.reactive import var
 from textual.widget import Widget
 from textual.widgets import Select, Label, Rule, Button
@@ -18,7 +19,11 @@ if TYPE_CHECKING:
 class QuickSettings(Widget):
     app: TermOS
 
-    visible = var(False)
+    visible = var(False, init=False)
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.styles.display = 'none'
 
     def compose(self) -> ComposeResult:
         yield Label(Text('Quick Settings', style='bold'), classes='heading')
@@ -36,9 +41,15 @@ class QuickSettings(Widget):
         yield Button('Power Off', variant='error', id='poweroff')
 
     def watch_visible(self, new: bool) -> None:
-        self.styles.display = 'block' if new else 'none'
         if new:
-            self.children[0].focus()
+            self.styles.offset = (45, 0)
+            self.styles.display = 'block'
+            self.focus()
+            self.animate('offset', value=Offset(), duration=0.5, easing='out_quad')
+        else:
+            def hide() -> None:
+                self.styles.display = 'none'
+            self.animate('offset', value=Offset(45), duration=0.5, easing='in_quad', on_complete=hide)
 
     def on_select_changed(self, message: Select.Changed) -> None:
         self.app.theme = message.value
