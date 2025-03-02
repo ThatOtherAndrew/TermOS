@@ -40,8 +40,11 @@ class StartButton(Widget):
     def render(self) -> RenderResult:
         return '╭─╮\n╰─╯'
 
-    async def on_click(self) -> None:
-        await self.run_action('app.command_palette')
+    async def on_click(self, event: events.MouseEvent) -> None:
+        if event.button == 1:
+            ... # TODO: launch start menu
+        elif event.button == 3:
+            await self.run_action('app.command_palette')
 
 
 class WindowTab(Widget):
