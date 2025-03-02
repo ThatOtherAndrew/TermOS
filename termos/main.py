@@ -9,6 +9,8 @@ from textual.reactive import var
 from termos.apps import OSApp
 from termos.apps.base import tcss_paths
 from termos.apps.notepad import Notepad
+from termos.apps.fileManager import FileManager
+from termos.components.desktop import DTPane
 from termos.components.menu_bar import MenuBar
 from termos.components.taskbar import Taskbar
 from termos.components.window import Window
@@ -23,17 +25,15 @@ class TermOS(TextualApp):
 
     def __init__(self):
         super().__init__()
-        self.os_apps: list[type[OSApp]] = [Notepad]
+        self.os_apps: list[type[OSApp]] = [Notepad, FileManager]
         self.processes: list[OSApp] = []
         self.windows: list[Window]
 
     def compose(self) -> ComposeResult:
         yield MenuBar()
-        yield Container(classes='desktop')
+        with Container(classes='desktop'):
+            yield DTPane()
         yield Taskbar().data_bind(TermOS.windows)
-
-    async def on_mount(self) -> None:
-        self.launch_notepad()
 
     def on_app_launched(self, app: type[OSApp]) -> None:
         self.notify(f'Launched {app.NAME}')
@@ -51,10 +51,3 @@ class TermOS(TextualApp):
         self.mutate_reactive(TermOS.windows)
         message.window.parent_app.on_window_close(message.window)
         message.stop()
-
-    @work
-    async def launch_notepad(self) -> None:
-        await asyncio.sleep(1)
-        self.os_apps[0].launch(self)
-        await asyncio.sleep(1)
-        self.os_apps[0].launch(self)

@@ -349,36 +349,4 @@ class SubPanes:
             self.main_folder_pane.show_primary_buttons()  # ✅ Restore primary buttons
 
 
-class MainFolderPane(Container):
-    """A pane that contains the 'Main Folder' taskbar buttons and file list display."""
-
-    def __init__(self) -> None:
-        super().__init__()
-        self.bin_list_pane = SubPanes.BinFolderPane(self)  # ✅ Pass reference to self
-        self.file_list_pane = SubPanes.SubFolderPane(self)  # ✅ Pass reference to self
-        self.button_container = Horizontal(id="taskbar-options")
-
-    def compose(self) -> ComposeResult:
-        """Create taskbar-style buttons and a container for the file list."""
-        with self.button_container:
-            yield Button("Main Folder", id="mfbtn")
-            yield Button("Bin", id="bbtn")
-            yield Button("Settings", id="sbtn")
-
-    @on(Button.Pressed, "#mfbtn")
-    def show_file_list(self) -> None:
-        """Handle Main Folder button click and list .txt files."""
-        self.mount(self.file_list_pane)
-        self.file_list_pane.list_text_files()
-        self.button_container.styles.display = "none"  # ✅ Hide primary buttons
-
-    def show_primary_buttons(self) -> None:
-        """Restore the primary buttons when the file list is closed."""
-        self.button_container.styles.display = "block"  # ✅ Show primary buttons again
-
-    @on(Button.Pressed, "#bbtn")
-    def show_bin_list(self) -> None:
-        """Handle Bin button click and list files in the 'Bin' folder."""
-        self.mount(self.bin_list_pane)
-        self.bin_list_pane.list_bin_files()
-        self.button_container.styles.display = "none"  # ✅ Hide primary buttons
+#class MainFolderPane(Container):
