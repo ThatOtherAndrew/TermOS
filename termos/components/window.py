@@ -115,8 +115,8 @@ class Window(Container):
         self.content = content
         self.title = title
         self.icon = icon
-        self.width = width
-        self.height = height
+        self.set_reactive(Window.width, width)
+        self.set_reactive(Window.height, height)
 
     def compose(self) -> ComposeResult:
         yield TitleBar(self.title, self.icon)
@@ -127,7 +127,11 @@ class Window(Container):
         self.post_message(Window.Created(self))
 
     def watch_minimised(self, new: bool) -> None:
-        self.styles.display = 'none' if new else 'block'
+        if new:
+            self.styles.display = 'none'
+        else:
+            self.bring_to_front()
+            self.styles.display = 'block'
         self.post_message(self.Minimised(self))
 
     def watch_maximised(self, new: bool) -> None:
@@ -165,8 +169,12 @@ class Window(Container):
         elif message.type is TitleBarButton.Type.CLOSE:
             self.post_message(self.Closed(self))
 
+    def bring_to_front(self) -> None:
+        if self.parent.children[-1] is not self:
+            self.parent.move_child(self, after=self.parent.children[-1])
+
     def on_mouse_down(self, event: events.MouseDown) -> None:
-        # self.bring_to_front()
+        self.bring_to_front()
 
         # continue only on left click
         if event.button != 1:

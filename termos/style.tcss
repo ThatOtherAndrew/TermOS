@@ -1,5 +1,5 @@
 Screen {
-    layers: desktop windows taskbar start-menu
+    layers: desktop windows taskbar start-menu;
 }
 
 MenuBar {
@@ -56,6 +56,22 @@ Taskbar {
         dock: right;
         border-left: vkey $foreground 20%;
         padding-right: 1;
+    }
+}
+
+StartMenu {
+    layer: start-menu;
+    dock: bottom;
+    margin-bottom: 2;
+
+    &, * {
+        width: auto;
+        height: auto;
+    }
+
+    ListItem {
+        height: 3;
+        padding: 1 2;
     }
 }
 
@@ -116,4 +132,8 @@ TitleBarButton {
     width: 1;
     height: 1;
     margin: 0 1;
+}
+
+Tooltip {
+    padding: 0;
 }
