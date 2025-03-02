@@ -4,9 +4,11 @@ from contextlib import suppress
 from enum import Enum
 from typing import TYPE_CHECKING
 
+from textual import events
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, Container
 from textual.css.query import NoMatches
+from textual.geometry import Offset
 from textual.message import Message
 from textual.reactive import reactive, Reactive
 from textual.widget import Widget
@@ -106,6 +108,8 @@ class Window(Container):
         height: int | str = 'auto',
     ) -> None:
         super().__init__(classes=classes)
+        self.mouse_at_drag_start: Offset | None = None
+        self.offset_at_drag_start: Offset | None = None
         self.parent_app = parent_app
         self.content = content
         self.title = title
@@ -153,3 +157,45 @@ class Window(Container):
             self.maximised = not self.maximised
         elif message.type is TitleBarButton.Type.CLOSE:
             self.post_message(self.Closed(self))
+
+    def on_mouse_down(self, event: events.MouseDown) -> None:
+        # self.bring_to_front()
+        self.focus()
+
+        # continue only on left click
+        if event.button != 1:
+            return
+
+        # continue only if not maximised
+        if self.maximised:
+            return
+
+        # continue only if mouse down on title bar
+        widget, _ = self.screen.get_widget_at(*event.screen_offset)
+        if widget not in self.query('TitleBar, Label'):
+            return
+
+        self.mouse_at_drag_start = event.screen_offset
+        self.offset_at_drag_start = Offset(
+            int(self.styles.offset.x.value),
+            int(self.styles.offset.y.value),
+        )
+        self.capture_mouse()
+        self.can_focus = False
+
+    def on_mouse_move(self, event: events.MouseMove) -> None:
+        if (
+            self.mouse_at_drag_start is not None
+            and self.offset_at_drag_start is not None
+        ):
+            self.styles.offset = (
+                self.offset_at_drag_start.x + event.screen_x - self.mouse_at_drag_start.x,
+                self.offset_at_drag_start.y + event.screen_y - self.mouse_at_drag_start.y,
+            )
+
+    def on_mouse_up(self) -> None:
+        self.mouse_at_drag_start = None
+        self.offset_at_drag_start = None
+        self.release_mouse()
+        # self.constrain_to_screen()
+        self.can_focus = True

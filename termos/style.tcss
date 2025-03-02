@@ -61,6 +61,7 @@ Window {
     width: auto;
     height: auto;
     background: $surface;
+    position: absolute;
 }
 
 TitleBar {
