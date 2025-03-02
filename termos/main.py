@@ -5,7 +5,7 @@ from textual.reactive import var
 
 from termos.apps import OSApp
 from termos.apps.base import tcss_paths
-from termos.apps.fileManager import FileManager
+from termos.apps.fileManager.main import FileManager
 from termos.apps.notepad import Notepad
 from termos.components.menu_bar import MenuBar
 from termos.components.taskbar import Taskbar
@@ -33,6 +33,7 @@ class TermOS(TextualApp):
     def on_mount(self) -> None:
         # TODO: remove this
         self.os_apps[0].launch(self)
+        self.os_apps[1].launch(self)
         # for app in self.os_apps:
         #     app.launch(self)
 
