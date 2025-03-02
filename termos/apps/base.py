@@ -4,7 +4,7 @@ import abc
 from pathlib import Path
 from typing import Any, Generator, TYPE_CHECKING
 
-from textual.app import ComposeResult
+from textual.widget import Widget
 
 from termos.components.window import Window
 
@@ -26,7 +26,7 @@ class OSApp(abc.ABC):
 
     def create_window(
         self,
-        content: ComposeResult,
+        content: Widget,
         classes: str | None = None,
         title: str | None | Ellipsis = ...,
         icon: str | None | Ellipsis = ...,

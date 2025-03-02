@@ -92,7 +92,7 @@ class Window(Container):
     def __init__(
         self,
         parent_app: OSApp,
-        content: ComposeResult,
+        content: Widget,
         classes: str | None = None,
         title: str | None = None,
         icon: str | None = None,
@@ -110,7 +110,7 @@ class Window(Container):
     def compose(self) -> ComposeResult:
         yield TitleBar(self.title, self.icon)
         with Container(classes="window-body"):
-            yield from self.content
+            yield self.content
 
     def watch_minimised(self, new: bool) -> None:
         self.styles.display = 'none' if new else 'block'
