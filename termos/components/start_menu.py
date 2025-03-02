@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from rich.text import Text
 from textual.app import ComposeResult
 from textual.reactive import var
 from textual.widget import Widget
@@ -22,9 +23,9 @@ class StartMenu(Widget):
     def compose(self) -> ComposeResult:
         with ListView():
             for app in self.app.os_apps:
-                with ListItem() as list_item:
-                    list_item.tooltip = app.DESCRIPTION
+                with ListItem():
                     yield Label(f'{app.ICON or ' '} {app.NAME}')
+                    yield Label(app.DESCRIPTION, classes='description')
 
     def watch_visible(self, new: bool) -> None:
         self.styles.display = 'block' if new else 'none'
