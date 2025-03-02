@@ -4,9 +4,7 @@ from textual.containers import Container
 from textual.reactive import var
 
 from termos.apps import OSApp
-from termos.apps.base import tcss_paths
-from termos.apps.fileManager.main import FileManager
-from termos.apps.notepad import Notepad
+from termos.apps.base import tcss_paths, apps
 from termos.components.menu_bar import MenuBar
 from termos.components.start_menu import StartMenu
 from termos.components.taskbar import Taskbar
@@ -22,7 +20,7 @@ class TermOS(TextualApp):
 
     def __init__(self):
         super().__init__()
-        self.os_apps: list[type[OSApp]] = [Notepad, FileManager]
+        self.os_apps: list[type[OSApp]] = [*apps()]
         self.processes: list[OSApp] = []
         self.windows: list[Window]
 
@@ -31,13 +29,6 @@ class TermOS(TextualApp):
         yield Container(id='window-container', classes='desktop')
         yield StartMenu()
         yield Taskbar().data_bind(TermOS.windows)
-
-    def on_mount(self) -> None:
-        # TODO: remove this
-        self.os_apps[0].launch(self)
-        self.os_apps[1].launch(self)
-        # for app in self.os_apps:
-        #     app.launch(self)
 
     def on_app_launched(self, app: type[OSApp]) -> None:
         pass
