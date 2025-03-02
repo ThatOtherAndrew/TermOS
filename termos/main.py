@@ -1,11 +1,12 @@
 from textual.app import App as TextualApp
 from textual.app import ComposeResult
-from textual.containers import Container
+from textual.containers import Container, HorizontalGroup, VerticalGroup
 from textual.reactive import var
 
 from termos.apps import OSApp
 from termos.apps.base import tcss_paths, apps
 from termos.components.menu_bar import MenuBar
+from termos.components.quick_settings import QuickSettings
 from termos.components.start_menu import StartMenu
 from termos.components.taskbar import Taskbar
 from termos.components.window import Window
@@ -28,6 +29,7 @@ class TermOS(TextualApp):
         yield MenuBar()
         yield Container(id='window-container', classes='desktop')
         yield StartMenu()
+        yield QuickSettings()
         yield Taskbar().data_bind(TermOS.windows)
 
     def on_app_launched(self, app: type[OSApp]) -> None:

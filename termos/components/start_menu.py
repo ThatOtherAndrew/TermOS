@@ -16,9 +16,6 @@ class StartMenu(Widget):
 
     visible = var(False)
 
-    def __init__(self) -> None:
-        super().__init__()
-
     def compose(self) -> ComposeResult:
         with ListView():
             for app in self.app.os_apps:

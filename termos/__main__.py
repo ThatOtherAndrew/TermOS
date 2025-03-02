@@ -1,6 +1,8 @@
 def main() -> None:
     from .main import TermOS
-    TermOS().run()
+    app_return = True
+    while app_return is not None:
+        app_return = TermOS().run()
 
 
 if __name__ == '__main__':

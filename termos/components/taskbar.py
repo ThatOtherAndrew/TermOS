@@ -3,13 +3,13 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from rich.text import Text
 from textual import events
 from textual.app import ComposeResult, RenderResult
 from textual.containers import HorizontalGroup, Horizontal
-from textual.reactive import reactive, var
+from textual.reactive import reactive
 from textual.widget import Widget
 
+from termos.components.quick_settings import QuickSettings
 from termos.components.start_menu import StartMenu
 from termos.components.window import Window
 
@@ -20,12 +20,7 @@ if TYPE_CHECKING:
 class Clock(Widget):
     time = reactive(str)
 
-    def __init__(self) -> None:
-        """Initialize the clock widget."""
-        super().__init__()
-
     def on_mount(self) -> None:
-        """Start updating the time every second."""
         self.update_time()  # Initial update
         self.set_interval(1, self.update_time)  # Update every second
 
@@ -36,12 +31,17 @@ class Clock(Widget):
     def render(self) -> RenderResult:
         return self.time
 
+    def on_click(self, event: events.Click) -> None:
+        if event.button == 1:
+            quick_settings = self.app.query_one(QuickSettings)
+            quick_settings.visible = not quick_settings.visible
+
 
 class StartButton(Widget):
     def render(self) -> RenderResult:
         return '╭─╮\n╰─╯'
 
-    async def on_click(self, event: events.MouseEvent) -> None:
+    async def on_click(self, event: events.Click) -> None:
         if event.button == 1:
             start_menu = self.app.query_one(StartMenu)
             start_menu.visible = not start_menu.visible

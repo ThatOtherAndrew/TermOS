@@ -1,5 +1,6 @@
 Screen {
     layers: desktop windows taskbar start-menu;
+    overflow: hidden;
 }
 
 MenuBar {
@@ -79,6 +80,39 @@ StartMenu {
 
     .description {
         margin-left: 3;
+        color: $text-muted;
+    }
+}
+
+.quick-settings-container {
+}
+
+QuickSettings {
+    layer: start-menu;
+    dock: right;
+    width: 40;
+    height: 100%;
+    background: transparent;
+    margin: 2 2 3 0;
+    border: round $secondary;
+    padding: 1;
+
+    & > * {
+        width: 100%;
+        text-align: center;
+        margin: 1 1;
+    }
+
+    .heading {
+        padding: 0;
+        margin: 0;
+    }
+
+    HorizontalGroup Label {
+        padding: 1 0 1 1;
+    }
+
+    .muted {
         color: $text-muted;
     }
 }
