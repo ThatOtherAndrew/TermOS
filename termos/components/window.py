@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from contextlib import suppress
 from enum import Enum
 from typing import TYPE_CHECKING
 
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, Container
+from textual.css.query import NoMatches
 from textual.message import Message
 from textual.reactive import reactive, Reactive
 from textual.widget import Widget
@@ -15,6 +17,8 @@ if TYPE_CHECKING:
 
 
 class TitleBarButton(Widget):
+    maximised = reactive(False)
+
     class Type(Enum):
         MINIMISE = '🗕'
         MAXIMISE = '🗖'
@@ -30,6 +34,8 @@ class TitleBarButton(Widget):
         self.type = button_type
 
     def render(self) -> str:
+        if self.type is self.Type.MAXIMISE and self.maximised:
+            return '🗗'
         return self.type.value
 
     def on_click(self):
@@ -51,9 +57,9 @@ class TitleBar(HorizontalGroup):
         if self.title is not None:
             yield Label(self.title, classes='window-title')
         with HorizontalGroup(classes='window-controls'):
-            yield TitleBarButton(TitleBarButton.Type.MINIMISE, classes="window-minimise")
-            yield TitleBarButton(TitleBarButton.Type.MAXIMISE, classes="window-maximise")
-            yield TitleBarButton(TitleBarButton.Type.CLOSE, classes="window-close")
+            yield TitleBarButton(TitleBarButton.Type.MINIMISE, classes="window-minimise-button")
+            yield TitleBarButton(TitleBarButton.Type.MAXIMISE, classes="window-maximise-button")
+            yield TitleBarButton(TitleBarButton.Type.CLOSE, classes="window-close-button")
 
 
 class Window(Container):
@@ -118,6 +124,8 @@ class Window(Container):
 
     def watch_maximised(self, new: bool) -> None:
         self.minimised = False
+        with suppress(NoMatches):
+            self.query_one('.window-maximise-button', TitleBarButton).maximised = new
         if new:
             self.styles.width = '100%'
             self.styles.height = '100%'
