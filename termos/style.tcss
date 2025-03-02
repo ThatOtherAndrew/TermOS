@@ -43,12 +43,14 @@ Taskbar {
         width: auto;
         height: 100%;
         margin: 0 1;
-        border-bottom: heavy $foreground 20%;
+        padding: 0 2 0 1;
+        border-bottom: heavy $foreground;
         &:hover {
-            border-bottom: heavy $accent;
+            border-bottom: heavy $primary;
         }
-        &.active {
-            border-bottom: heavy $foreground;
+        &.minimised {
+            color: $text-muted;
+            border-bottom: heavy $foreground 20%;
         }
     }
 
@@ -74,7 +76,6 @@ StartMenu {
     ListItem {
         padding: 0 2;
     }
-
 
     .description {
         margin-left: 3;

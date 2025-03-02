@@ -13,11 +13,6 @@ from termos.main import TermOS
 
 
 class ClockWidget(Widget):
-    CSS = """
-    Screen { align: center middle; }
-    Digits { width: auto; }
-    """
-
     def compose(self) -> ComposeResult:
         yield Digits('')
 
@@ -37,4 +32,4 @@ class Clock(OSApp):
 
     @staticmethod
     def launch(os: TermOS) -> None:
-        Clock(os).create_window(ClockWidget(), width=25, height=4)
+        Clock(os).create_window(ClockWidget(), 'clock', width=26, height=4)

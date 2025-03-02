@@ -7,7 +7,7 @@ from rich.text import Text
 from textual import events
 from textual.app import ComposeResult, RenderResult
 from textual.containers import HorizontalGroup, Horizontal
-from textual.reactive import reactive
+from textual.reactive import reactive, var
 from textual.widget import Widget
 
 from termos.components.start_menu import StartMenu
@@ -50,28 +50,23 @@ class StartButton(Widget):
 
 
 class WindowTab(Widget):
-    italicised = reactive(False)
-
     def __init__(self, window: Window) -> None:
         super().__init__()
         self.window = window
 
     def on_mount(self) -> None:
-        def set_italicised(minimised: bool):
-            self.italicised = minimised
+        def set_minimised(minimised: bool):
+            self.set_class(minimised, 'minimised')
 
-        self.watch(self.window, 'minimised', set_italicised)
+        self.watch(self.window, 'minimised', set_minimised)
 
     def render(self) -> RenderResult:
         parts = []
         if self.window.icon is not None:
-            parts.append(Text(self.window.icon))
+            parts.append(self.window.icon)
         if self.window.title is not None:
-            parts.append(Text(
-                self.window.title,
-                style='italic' if self.italicised else ''
-            ))
-        return Text(' ').join(parts or [Text('...')])
+            parts.append(self.window.title)
+        return ' '.join(parts or ['...'])
 
     def on_click(self) -> None:
         self.window.minimised = not self.window.minimised

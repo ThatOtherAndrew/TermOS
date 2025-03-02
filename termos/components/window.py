@@ -130,8 +130,8 @@ class Window(Container):
         if new:
             self.styles.display = 'none'
         else:
-            self.bring_to_front()
             self.styles.display = 'block'
+            self.focus()
         self.post_message(self.Minimised(self))
 
     def watch_maximised(self, new: bool) -> None:
@@ -172,6 +172,9 @@ class Window(Container):
     def bring_to_front(self) -> None:
         if self.parent.children[-1] is not self:
             self.parent.move_child(self, after=self.parent.children[-1])
+
+    def on_focus(self) -> None:
+        self.bring_to_front()
 
     def on_mouse_down(self, event: events.MouseDown) -> None:
         self.bring_to_front()

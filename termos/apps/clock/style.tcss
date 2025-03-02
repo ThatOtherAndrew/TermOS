@@ -1,0 +1,9 @@
+Window.clock {
+    ClockWidget {
+        align: center middle;
+    }
+
+    Digits {
+        width: auto;
+    }
+}

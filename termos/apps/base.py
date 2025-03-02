@@ -44,6 +44,7 @@ class OSApp(abc.ABC):
 
         window = Window(self, content, classes, title, icon, width, height)
         self.os.query_one('#window-container').mount(window)
+        window.focus()
         return window
 
     def on_window_close(self, window: Window) -> None:
