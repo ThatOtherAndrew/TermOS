@@ -58,11 +58,11 @@ class OSApp(abc.ABC):
         self.os.on_app_killed(self.__class__)
 
 
-def tcss_paths() -> Generator[str, None, None]:
+def tcss_paths() -> Generator[Path, None, None]:
     for app_dir in Path(__file__).parent.glob('*/*.tcss'):
         app_dir: Path
         if app_dir.is_file():
-            yield app_dir.as_posix()
+            yield app_dir
 
 
 def apps() -> Generator[type[OSApp], None, None]:

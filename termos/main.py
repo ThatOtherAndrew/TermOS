@@ -1,6 +1,8 @@
+from pathlib import Path
+
 from textual.app import App as TextualApp
 from textual.app import ComposeResult
-from textual.containers import Container, HorizontalGroup, VerticalGroup
+from textual.containers import Container
 from textual.reactive import var
 
 from termos.apps import OSApp
@@ -13,8 +15,8 @@ from termos.components.window import Window
 
 
 class TermOS(TextualApp):
-    TITLE = "TermOS"
-    CSS_PATH = ["style.tcss", *tcss_paths()]
+    TITLE = 'TermOS'
+    CSS_PATH = ['style.tcss', *tcss_paths()]
     ALLOW_SELECT = False
 
     windows: var[list[Window]] = var(list)
