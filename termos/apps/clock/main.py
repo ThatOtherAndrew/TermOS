@@ -9,7 +9,7 @@ from textual.widget import Widget
 from textual.widgets import Digits
 
 from termos.apps import OSApp
-from termos.main import TermOS
+from termos.termos import TermOS
 
 
 class ClockWidget(Widget):

@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from textual.app import App as TextualApp
 from textual.app import ComposeResult
 from textual.containers import Container

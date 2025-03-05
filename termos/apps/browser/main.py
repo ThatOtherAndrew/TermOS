@@ -13,7 +13,7 @@ from textual.widgets import MarkdownViewer, Input, Button
 from termos.apps import OSApp
 
 if TYPE_CHECKING:
-    from termos.main import TermOS
+    from termos.termos import TermOS
 
 
 class BrowserWidget(Widget):

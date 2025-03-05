@@ -13,7 +13,7 @@ from textual.widget import Widget
 from textual.widgets import Select, Label, Rule, Button
 
 if TYPE_CHECKING:
-    from termos.main import TermOS
+    from termos.termos import TermOS
 
 
 class QuickSettings(Widget):

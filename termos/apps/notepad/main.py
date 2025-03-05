@@ -10,7 +10,7 @@ from textual.widgets import TextArea, Label, Select
 from termos.apps import OSApp
 
 if TYPE_CHECKING:
-    from termos.main import TermOS
+    from termos.termos import TermOS
 
 
 class NotepadWidget(Widget):

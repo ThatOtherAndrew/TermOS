@@ -14,7 +14,7 @@ from termos.components.start_menu import StartMenu
 from termos.components.window import Window
 
 if TYPE_CHECKING:
-    from termos.main import TermOS
+    from termos.termos import TermOS
 
 
 class Clock(Widget):
