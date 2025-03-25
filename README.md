@@ -4,7 +4,7 @@ TermOS is a fantasy operating system and desktop environment which marries the e
 
 TermOS was originally created in 24 hours for [HackLondon 2025](https://www.huzzle.app/events/hacklondon-2025-884200), and won first place for its category of _A World Without X_ (in this case, X being the modern-day graphical user interface).
 
-![TermOS in action](https://i.imgur.com/HU1DP5R.png)
+![TermOS in action](assets/screenshot.png)
 
 ## Features
 | Category          | Feature                              | Support | Notes                               |
